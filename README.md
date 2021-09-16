@@ -1,2 +1,1 @@
-# kubernetes-manifests
-Kubernetes manifests
+# Kubernetes manifests: The perfect cluster
