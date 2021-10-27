@@ -1,0 +1,14 @@
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+metadata:
+  name: mywebserver
+  namespace: challenge
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mywebserver
+  minReplicas: 5
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75

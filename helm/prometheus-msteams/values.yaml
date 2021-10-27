@@ -1,0 +1,6 @@
+---
+connectors:
+  # This will be used as http://prometheus-msteams:2000/devops
+  - devops: "https://webhook.office.com/webhookb2/xxxxxxxxxxxxxxxxxx"
+  # This will be used as http://prometheus-msteams:2000/developers
+  - developers: "https://webhook.office.com/webhookb2/yyyyyyyyyyyyyy"

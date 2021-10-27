@@ -1,0 +1,11 @@
+---
+kind: PodDisruptionBudget
+apiVersion: policy/v1
+metadata:
+  name: mywebserver
+  namespace: challenge
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: mywebserver

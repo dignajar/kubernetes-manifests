@@ -1,0 +1,90 @@
+pushgateway:
+  enabled: false
+
+kubeStateMetrics:
+  kube-state-metrics:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+
+nodeExporter:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  extraArgs:
+    collector.filesystem.ignored-mount-points: "^/(sys|proc|dev|run)($|/)"
+
+alertmanager:
+  configFromSecret: alertmanager-config
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  strategy:
+    type: Recreate # Delete pod before create a new one to avoid deadlock mouting the volume
+  persistentVolume:
+    storageClass: "io1"
+    size: 10Gi
+  nodeSelector: # Need it for EBS volumes
+    zone: a
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    hosts:
+      - alertmanager.theperfectk8scluster.com
+  baseURL: https://alertmanager.theperfectk8scluster.com
+
+server:
+  resources:
+    requests:
+      cpu: 3000m
+      memory: 12Gi
+    limits:
+      cpu: 3000m
+      memory: 12Gi
+  strategy:
+    type: Recreate # Delete pod before create a new one to avoid deadlock mouting the volume
+  persistentVolume:
+    storageClass: "io1"
+    size: 100Gi
+  nodeSelector: # Need it for EBS volumes
+    zone: a
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    hosts:
+      - prometheus.theperfectk8scluster.com
+  extraConfigmapMounts:
+    - name: prometheus-rules
+      configMap: prometheus-rules
+      mountPath: /etc/prometheus/rules/
+      subPath: ""
+serverFiles:
+  prometheus.yml:
+    rule_files:
+      - /etc/prometheus/rules/*.yml
+
+configmapReload:
+  prometheus:
+    extraArgs:
+      volume-dir: /etc/prometheus/rules/
+    extraConfigmapMounts:
+      - name: prometheus-rules
+        configMap: prometheus-rules
+        mountPath: /etc/prometheus/rules/
+        subPath: ""
+  alertmanager:
+    enabled: false

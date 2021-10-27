@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mywebserver
+  namespace: challenge
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: mywebserver-internal-ip.theperfectk8scluster.com
+spec:
+  type: NodePort
+  selector:
+    app: mywebserver
+  ports:
+    - name: http
+      port: 32080
+      protocol: TCP
+      targetPort: 8080
