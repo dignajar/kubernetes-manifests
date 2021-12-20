@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overprovisioning
+  namespace: default
+spec:
+  strategy:
+    type: Recreate
+  replicas: 3
+  selector:
+    matchLabels:
+      app: overprovisioning
+  template:
+    metadata:
+      labels:
+        app: overprovisioning
+    spec:
+      priorityClassName: overprovisioning
+      nodeSelector:
+        beta.kubernetes.io/instance-type: m5d.xlarge # Overprovisining instance only m5d.xlarge
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - overprovisioning
+            topologyKey: zone
+      containers:
+      - name: pause
+        image: kubernetes/pause:latest
+        resources:
+          requests:
+            cpu: 1        # m5d.xlarge CPU 4
+            memory: 1Gi   # m5d.xlarge Mem 16Gi

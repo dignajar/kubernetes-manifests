@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-vector-add
+  namespace: kube-system
+spec:
+  nodeSelector:
+    dedicated: gpu
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: "gpu"
+      effect: "NoSchedule"
+  restartPolicy: OnFailure
+  containers:
+  - name: gpu
+    image: "k8s.gcr.io/cuda-vector-add:v0.1"
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+        memory: 10Gi

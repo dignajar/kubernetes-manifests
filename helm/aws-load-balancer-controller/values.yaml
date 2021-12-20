@@ -1,0 +1,16 @@
+---
+clusterName: theperfectk8scluster
+ingressClass: alb
+hostNetwork: true
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxx:role/external-dns
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 600Mi

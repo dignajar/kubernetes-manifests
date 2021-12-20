@@ -1,0 +1,22 @@
+---
+provider: aws
+policy: upsert-only
+registry: noop
+
+domainFilters:
+  - theperfectk8scluster.com
+
+sources:
+  - service
+  - ingress
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 512Mi
+
+serviceAccount:
+  create: true
+  name: external-dns
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxx:role/external-dns

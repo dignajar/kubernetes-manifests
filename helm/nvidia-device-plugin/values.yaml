@@ -1,0 +1,9 @@
+---
+nodeSelector:
+  dedicated: gpu
+
+tolerations:
+  - key: dedicated
+    operator: Equal
+    value: gpu
+    effect: NoSchedule

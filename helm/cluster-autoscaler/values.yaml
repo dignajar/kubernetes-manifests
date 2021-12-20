@@ -1,0 +1,22 @@
+---
+cloudProvider: aws
+awsRegion: us-east-1
+
+priorityClassName: system-cluster-critical
+
+autoDiscovery:
+  clusterName: theperfectk8scluster
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 600Mi
+
+rbac:
+  create: true
+  pspEnabled: true
+  serviceAccount:
+    create: true
+    name: cluster-autoscaler
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxx:role/external-dns

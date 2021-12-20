@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bad-pod
+  namespace: default
+  labels:
+    app: pentest
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pentest
+      type: deployment
+  template:
+    metadata:
+      labels:
+        app: pentest
+        type: deployment
+    spec:
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      containers:
+      - name: bad-pod
+        image: ubuntu
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host
+          name: noderoot
+        command: [ "/bin/sh", "-c", "--" ]
+        args: [ "while true; do sleep 30; done;" ]
+      volumes:
+      - name: noderoot
+        hostPath:
+          path: /
